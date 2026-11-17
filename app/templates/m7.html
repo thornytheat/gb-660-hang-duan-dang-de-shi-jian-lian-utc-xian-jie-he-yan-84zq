@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="kpis">
+  <div class="kpi"><b>应赔口径</b><strong>整数分</strong><small>fen</small></div>
+  <div class="kpi"><b>未结算</b><strong>重算</strong><small>原事实留痕</small></div>
+  <div class="kpi"><b>已结算</b><strong>补赔/追偿</strong><small>原凭证不动</small></div>
+  <div class="kpi"><b>支付</b><strong>不打款</strong><small>仅入账</small></div>
+</section>
+<div class="grid grid--split">
+  <section class="panel">
+    <div class="panel__head"><h2>索赔台账（自然键去重）</h2><span class="state state--ok">凭证链可回读</span></div>
+    <div class="panel__body panel__body--scroll">
+      <table class="ledger"><thead><tr><th>序号</th><th>索赔自然键</th><th>状态</th><th class="num">应赔(分)</th></tr></thead>
+      <tbody>{% for row in rows %}<tr><td class="num">{{ loop.index }}</td><td>{{ row.key }}</td><td>{{ row.status }}</td><td class="num">{{ row.value }}</td></tr>{% endfor %}</tbody></table>
+    </div>
+  </section>
+  <section class="panel panel--evidence">
+    <div class="panel__head"><h2>接口回执</h2><span class="panel__meta">幂等键 X-Request-Key</span></div>
+    <div class="panel__body"><div class="evidence"><b>POST /api/claims/register | revise | settle | withdraw</b><span>GET /api/claims/{claim_id} 回读</span><code>{{ endpoint }}</code></div><pre id="result">等待运行</pre></div>
+  </section>
+  <section class="panel panel--status">
+    <div class="panel__head"><h2>结算红线</h2><span class="panel__meta">5 条</span></div>
+    <div class="panel__body"><div class="legend"><span>正常衔接拒付</span><span>证据不全拒付</span><span>旧版本并发拒绝</span><span>撤回走反向分录</span><span>重试不重复赔款</span></div></div>
+  </section>
+</div>
+{% endblock %}
